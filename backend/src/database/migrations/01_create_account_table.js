@@ -1,13 +1,18 @@
 exports.up = function (knex) {
-  return knex.schema.createTable('account', (table) => {
-    table.integer('id', 6).primary();
-    table.integer('user').notNullable();
-    table.decimal('value').notNullable();
+  return knex.schema.createTable('accounts', (table) => {
+    table.integer('id')
+      .primary();
+    table.integer('user_id')
+      .unsigned();
+    table.decimal('value')
+      .notNullable();
 
-    table.foreign('user').references('user.id_in_user');
+    table.foreign('user_id')
+      .references('id')
+      .inTable('users');
   });
 };
 
 exports.down = function (knex) {
-  return knex.schema.dropTable('account');
+  return knex.schema.dropTable('accounts');
 };
