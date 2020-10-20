@@ -1,6 +1,6 @@
 exports.up = function (knex) {
   return knex.schema.createTable('accounts', (table) => {
-    table.integer('id')
+    table.string('id')
       .primary();
     table.integer('user_id')
       .unsigned();

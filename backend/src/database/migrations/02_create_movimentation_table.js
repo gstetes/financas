@@ -8,7 +8,7 @@ exports.up = function (knex) {
       .notNullable();
     table.decimal('value')
       .notNullable();
-    table.integer('account_id');
+    table.string('account_id');
     table.date('date');
 
     table.foreign('account_id')

@@ -1,6 +1,8 @@
 const connection = require('../database/connection');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
+//Função para criar um usuário
 exports.create = async (req, res) => {
   //Receber dados do usuário
   const { name, email, password, confirmPassword } = req.body;
@@ -36,14 +38,22 @@ exports.create = async (req, res) => {
       email,
       password: hashPassword
     })
-    .then(() => {
-      return res.status(200)
-        .json({
-          message: "User has been inserted."
+    .then(async (response) => {
+      const account_id = crypto.randomBytes(6).toString('HEX');
+      await connection('accounts')
+        .insert({
+          id: account_id,
+          user_id: response[0],
+          value: 0,
+        })
+        .then(() => {
+          res.status(200)
+            .json({ message: 'User has been included.' });
         });
     });
 };
 
+//Função para listar todos os usuários
 exports.list = async (req, res) => {
   const users = await connection('users')
     .select('*');
@@ -52,6 +62,7 @@ exports.list = async (req, res) => {
     .json(users);
 };
 
+//Função para alterar um usuário
 exports.update = async (req, res) => {
   //Receber novos dados do usuário
   const { name, email, password, confirmPassword } = req.body;
@@ -93,6 +104,7 @@ exports.update = async (req, res) => {
     });
 };
 
+//Função para deletar um usuário
 exports.delete = async (req, res) => {
   //Receber e-mail do usuário
   const { email } = req.body;
