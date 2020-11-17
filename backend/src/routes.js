@@ -13,5 +13,6 @@ router.delete('/users/delete', userController.delete);
 //Rotas de movimentação
 router.post('/moviment/in', movimentController.in);
 router.post('/moviment/out', movimentController.out);
+router.get('/moviment', movimentController.list);
 
 module.exports = router;

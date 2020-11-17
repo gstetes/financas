@@ -9,7 +9,7 @@ exports.up = function (knex) {
     table.decimal('value')
       .notNullable();
     table.string('account_id');
-    table.date('date');
+    table.string('date');
 
     table.foreign('account_id')
       .references('id')
