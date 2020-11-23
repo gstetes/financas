@@ -75,7 +75,45 @@ exports.out = async (req, res) => {
     });
 };
 
+exports.search = async (req, res) => {
+  //Receber ID do usuário
+  const { user } = req.query;
 
+  //Puxar número da conta do usuário
+  const account = await connection('accounts')
+    .select('*')
+    .where('user_id', user)
+    .first();
+
+  //Validar exixstência da conta
+  if (!account) {
+    return res.status(400)
+      .json({
+        message: 'Wrong account',
+      });
+  };
+
+  //Puxar movimentações
+  const movimentations = await connection('movimentations')
+    .select('*')
+    .where('account_id', account.id);
+
+  //Validar Movimentações
+  if (!movimentations) {
+    return res.status(400)
+      .json({
+        message: "Account with no moviment.",
+      });
+  };
+
+  //Enviar resposta com movimentações
+  return res.status(200)
+    .json({
+      movimentations,
+      total: account.value,
+    });
+
+};
 
 exports.list = async (req, res) => {
   const moviments = await connection('movimentations')
